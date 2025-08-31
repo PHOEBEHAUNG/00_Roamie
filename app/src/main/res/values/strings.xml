@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Roamie</string>
+
+    <string name="back">Back</string>
+    <string name="open_camera">Open Camera</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="start_capture">Start Capture</string>
+    <string name="stop_capture">Stop Capture</string>
+</resources>
