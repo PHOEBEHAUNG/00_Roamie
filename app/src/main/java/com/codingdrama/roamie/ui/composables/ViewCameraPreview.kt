@@ -21,14 +21,11 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,25 +70,38 @@ import java.io.ByteArrayOutputStream
 @Composable
 fun ViewCameraPreview(
     modifier: Modifier = Modifier,
-    onBitmapAvailable: (Bitmap) -> Unit
+    onBitmapAvailable: (Bitmap) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-    // 手電筒狀態
+    // Torch state
     var isTorchOn by remember { mutableStateOf(false) }
 
-    // Camera 對象，用於控制閃光燈
+    // Camera object
     var cameraControl: Camera? by remember { mutableStateOf(null) }
 
-    // 保存最新影像，按下截圖時使用
+    // store latest bitmap for screenshot
     var latestBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
-    // 用於縮放動畫
+    // scale animation state
     var isAnimating by remember { mutableStateOf(false) }
     val scaleAnim = remember { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = modifier) {
+        Row(modifier = modifier
+            .fillMaxWidth()
+            .align(Alignment.TopStart) // align to top start
+            .padding(start = 16.dp, end = 16.dp)){
+            Button(
+                onClick = { onBackClick.invoke() },
+                modifier = Modifier.padding(0.dp)
+            ) {
+                Text(text = context.getString(R.string.back))
+            }
+        }
+
         AndroidView(
             modifier = modifier,
             factory = { ctx ->
@@ -105,7 +115,7 @@ fun ViewCameraPreview(
 
                     // 1. Preview
                     val preview = Preview.Builder().build().also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
+                        it.surfaceProvider = previewView.surfaceProvider
                     }
 
                     // 2. ImageAnalysis
@@ -118,7 +128,7 @@ fun ViewCameraPreview(
                             ) { imageProxy ->
                                 val bitmap = imageProxy.toBitmapCorrectOrientation()
                                 if (bitmap != null) {
-                                    latestBitmap = bitmap // 保存最新影像
+                                    latestBitmap = bitmap // store latest bitmap
                                     onBitmapAvailable(bitmap)
                                 }
                                 imageProxy.close()
@@ -131,6 +141,7 @@ fun ViewCameraPreview(
                     try {
                         // 4. lifecycle bind
                         cameraProvider.unbindAll()
+                        // notice: what use case to bind must be one or more
                         val camera = cameraProvider.bindToLifecycle(
                             context as LifecycleOwner,
                             cameraSelector,
@@ -138,10 +149,10 @@ fun ViewCameraPreview(
                             imageAnalyzer
                         )
 
-                        cameraControl = camera // 保存 camera 物件，用於控制閃光燈
+                        cameraControl = camera // control camera take/stop video, enableTorch...
 
-                        // 初始化閃光燈狀態
-                        camera.cameraControl.enableTorch(isTorchOn)
+                        // initialize torch state
+                        cameraControl?.cameraControl?.enableTorch(isTorchOn)
                     } catch (e: Exception) {
                         Log.e("CameraPreview", "Use case binding failed", e)
                     }
@@ -162,7 +173,7 @@ fun ViewCameraPreview(
             }
         }
 
-        // 手電筒開關 UI
+        // Control buttons
         Row(modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
@@ -186,9 +197,9 @@ fun ViewCameraPreview(
                                 targetValue = 0f,
                                 animationSpec = tween(durationMillis = 1000)
                             )
-                            // 縮小完成後儲存檔案
+                            // save bitmap to file
                             saveBitmapToFile(context, bitmap)
-                            // 重置動畫
+                            // reset animation state
                             scaleAnim.snapTo(1f)
                             isAnimating = false
                         }
@@ -202,7 +213,7 @@ fun ViewCameraPreview(
     }
 }
 
-// 🔹 儲存 Bitmap 成 JPEG
+// save bitmap to file
 fun saveBitmapToFile(context: Context, bitmap: Bitmap) {
     val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
     val fileName = "IMG_$timestamp.jpg"
@@ -263,7 +274,7 @@ fun ImageProxy.toBitmapCorrectOrientation(): Bitmap? {
     val imageBytes = out.toByteArray()
     val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size) ?: return null
 
-    // 🔹 旋轉角度
+    // rotate bitmap according to imageInfo.rotationDegrees
     val matrix = Matrix()
     matrix.postRotate(this.imageInfo.rotationDegrees.toFloat())
     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
