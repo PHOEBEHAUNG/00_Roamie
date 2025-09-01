@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 // Repository
 class TestRepository @Inject constructor() {
-    // ...
+    fun getMessage(): String = "Hello from Repository!"
 }
 
 // Module
