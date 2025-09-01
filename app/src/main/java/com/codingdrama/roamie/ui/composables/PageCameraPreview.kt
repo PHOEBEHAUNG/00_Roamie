@@ -44,6 +44,7 @@ import java.util.Date
 import java.util.Locale
 import android.graphics.Matrix
 import android.graphics.YuvImage
+import androidx.compose.ui.tooling.preview.Preview
 import java.io.ByteArrayOutputStream
 
 //@Composable
@@ -68,7 +69,7 @@ import java.io.ByteArrayOutputStream
 //}
 
 @Composable
-fun ViewCameraPreview(
+fun PageCameraPreview(
     modifier: Modifier = Modifier,
     onBitmapAvailable: (Bitmap) -> Unit,
     onBackClick: () -> Unit
@@ -90,17 +91,7 @@ fun ViewCameraPreview(
     val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = modifier) {
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .align(Alignment.TopStart) // align to top start
-            .padding(start = 16.dp, end = 16.dp)){
-            Button(
-                onClick = { onBackClick.invoke() },
-                modifier = Modifier.padding(0.dp)
-            ) {
-                Text(text = context.getString(R.string.back))
-            }
-        }
+
 
         AndroidView(
             modifier = modifier,
@@ -114,7 +105,7 @@ fun ViewCameraPreview(
                     val cameraProvider = cameraProviderFuture.get()
 
                     // 1. Preview
-                    val preview = Preview.Builder().build().also {
+                    val preview = androidx.camera.core.Preview.Builder().build().also {
                         it.surfaceProvider = previewView.surfaceProvider
                     }
 
@@ -210,7 +201,29 @@ fun ViewCameraPreview(
                 Text(text = context.getString(R.string.take_photo))
             }
         }
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.TopStart) // align to top start
+            .padding(20.dp)
+        ){
+            Button(
+                onClick = { onBackClick.invoke() },
+            ) {
+                Text(text = context.getString(R.string.back))
+            }
+        }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PageCameraPreviewPreview() {
+    PageCameraPreview(
+        modifier = Modifier,
+        onBitmapAvailable = {},
+        onBackClick = {}
+    )
 }
 
 // save bitmap to file
