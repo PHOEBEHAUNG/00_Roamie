@@ -7,8 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-//class MainViewModel @Inject constructor(private val testRepository: TestRepository) : ViewModel() {
-class MainViewModel : ViewModel() {
+class MainViewModel @Inject constructor(private val testRepository: TestRepository) : ViewModel() {
+//class MainViewModel : ViewModel() {
+    fun getGreeting() = testRepository.getMessage()
 
     // create a enum class to define what view mode should be
     enum class ViewMode {
