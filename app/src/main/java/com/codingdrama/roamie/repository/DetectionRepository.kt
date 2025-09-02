@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class DetectionRepository @Inject constructor(@BindTFDetection val detector: IDetection) {
     fun detect(context: Context?, bitmap: Bitmap?) {
+        // TODO Customize detection logic here if needed
         detector.detect(context, bitmap)
     }
 }
