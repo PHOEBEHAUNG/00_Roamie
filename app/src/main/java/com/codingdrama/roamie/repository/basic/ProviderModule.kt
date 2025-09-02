@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object ProviderModule {
+    // you can choose use bind or provide for interface implementation
     @Provides
     @BindTFDetection
     fun provideTFDetection(): IDetection {
