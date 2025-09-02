@@ -44,6 +44,15 @@ import java.util.Date
 import java.util.Locale
 import android.graphics.Matrix
 import android.graphics.YuvImage
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import java.io.ByteArrayOutputStream
 
@@ -71,6 +80,7 @@ import java.io.ByteArrayOutputStream
 @Composable
 fun PageCameraPreview(
     modifier: Modifier = Modifier,
+    isPreview: Boolean = false,
     onBitmapAvailable: (Bitmap) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -92,83 +102,85 @@ fun PageCameraPreview(
 
     Box(modifier = modifier) {
 
-
-        AndroidView(
-            modifier = modifier,
-            factory = { ctx ->
-                PreviewView(ctx).apply {
-                    scaleType = PreviewView.ScaleType.FILL_CENTER
-                }
-            },
-            update = { previewView ->
-                cameraProviderFuture.addListener({
-                    val cameraProvider = cameraProviderFuture.get()
-
-                    // 1. Preview
-                    val preview = androidx.camera.core.Preview.Builder().build().also {
-                        it.surfaceProvider = previewView.surfaceProvider
+        if (!isPreview) {
+            AndroidView(
+                modifier = modifier,
+                factory = { ctx ->
+                    PreviewView(ctx).apply {
+                        scaleType = PreviewView.ScaleType.FILL_CENTER
                     }
+                },
+                update = { previewView ->
+                    cameraProviderFuture.addListener({
+                        val cameraProvider = cameraProviderFuture.get()
 
-                    // 2. ImageAnalysis
-                    val imageAnalyzer = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                        .also { analysisUseCase ->
-                            analysisUseCase.setAnalyzer(
-                                ContextCompat.getMainExecutor(context)
-                            ) { imageProxy ->
-                                val bitmap = imageProxy.toBitmapCorrectOrientation()
-                                if (bitmap != null) {
-                                    latestBitmap = bitmap // store latest bitmap
-                                    onBitmapAvailable(bitmap)
-                                }
-                                imageProxy.close()
-                            }
+                        // 1. Preview
+                        val preview = androidx.camera.core.Preview.Builder().build().also {
+                            it.surfaceProvider = previewView.surfaceProvider
                         }
 
-                    // 3. choose camera
-                    val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                        // 2. ImageAnalysis
+                        val imageAnalyzer = ImageAnalysis.Builder()
+                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                            .build()
+                            .also { analysisUseCase ->
+                                analysisUseCase.setAnalyzer(
+                                    ContextCompat.getMainExecutor(context)
+                                ) { imageProxy ->
+                                    val bitmap = imageProxy.toBitmapCorrectOrientation()
+                                    if (bitmap != null) {
+                                        latestBitmap = bitmap // store latest bitmap
+                                        onBitmapAvailable(bitmap)
+                                    }
+                                    imageProxy.close()
+                                }
+                            }
 
-                    try {
-                        // 4. lifecycle bind
-                        cameraProvider.unbindAll()
-                        // notice: what use case to bind must be one or more
-                        val camera = cameraProvider.bindToLifecycle(
-                            context as LifecycleOwner,
-                            cameraSelector,
-                            preview,
-                            imageAnalyzer
-                        )
+                        // 3. choose camera
+                        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-                        cameraControl = camera // control camera take/stop video, enableTorch...
+                        try {
+                            // 4. lifecycle bind
+                            cameraProvider.unbindAll()
+                            // notice: what use case to bind must be one or more
+                            val camera = cameraProvider.bindToLifecycle(
+                                context as LifecycleOwner,
+                                cameraSelector,
+                                preview,
+                                imageAnalyzer
+                            )
 
-                        // initialize torch state
-                        cameraControl?.cameraControl?.enableTorch(isTorchOn)
-                    } catch (e: Exception) {
-                        Log.e("CameraPreview", "Use case binding failed", e)
-                    }
-                }, ContextCompat.getMainExecutor(context))
-            }
-        )
+                            cameraControl = camera // control camera take/stop video, enableTorch...
 
-        latestBitmap?.let { bitmap ->
-            if (isAnimating) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(200.dp)
-                        .scale(scaleAnim.value) // 動態縮放
-                        .align(Alignment.Center)
-                )
+                            // initialize torch state
+                            cameraControl?.cameraControl?.enableTorch(isTorchOn)
+                        } catch (e: Exception) {
+                            Log.e("CameraPreview", "Use case binding failed", e)
+                        }
+                    }, ContextCompat.getMainExecutor(context))
+                }
+            )
+
+            latestBitmap?.let { bitmap ->
+                if (isAnimating) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(200.dp)
+                            .scale(scaleAnim.value) // 動態縮放
+                            .align(Alignment.Center)
+                    )
+                }
             }
         }
-
         // Control buttons
         Row(modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
-            .padding(16.dp)) {
+            .padding(16.dp, 16.dp, 16.dp, 32.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
 
 //            Text(text = "Torch")
 //            Switch(
@@ -180,6 +192,11 @@ fun PageCameraPreview(
 //            )
 
             Button(
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF429EF0)),
+                modifier = Modifier
+                    .padding(8.dp, 8.dp, 8.dp, 25.dp),
+//                    .fillMaxWidth(0.6f),
+                shape = RoundedCornerShape(70.dp),
                 onClick = {
                     latestBitmap?.let { bitmap ->
                         isAnimating = true
@@ -195,22 +212,32 @@ fun PageCameraPreview(
                             isAnimating = false
                         }
                     }
-                },
-                modifier = Modifier.padding(16.dp)
+                }
             ) {
-                Text(text = context.getString(R.string.take_photo))
+                Icon(modifier = Modifier
+                    .padding(10.dp, 10.dp)
+                    .size(42.dp),
+                    painter = painterResource(id = R.drawable.ic_camera_enhance_24), contentDescription = context.getString(R.string.take_photo))
             }
         }
 
         Row(modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.TopStart) // align to top start
-            .padding(20.dp)
+            .padding(20.dp, 30.dp, 20.dp, 20.dp)
         ){
-            Button(
-                onClick = { onBackClick.invoke() },
+            Surface(
+                modifier = Modifier.size(40.dp),
+                shape = CircleShape,
+                color = Color.White
             ) {
-                Text(text = context.getString(R.string.back))
+                IconButton(onClick = { onBackClick.invoke() }) {
+                    Icon(
+                        modifier = Modifier.size(40.dp),
+                        painter = painterResource(id = R.drawable.ic_arrow_circle_left_24),
+                        contentDescription = context.getString(R.string.back),
+                    )
+                }
             }
         }
     }
@@ -221,6 +248,7 @@ fun PageCameraPreview(
 fun PageCameraPreviewPreview() {
     PageCameraPreview(
         modifier = Modifier,
+        isPreview = true,
         onBitmapAvailable = {},
         onBackClick = {}
     )

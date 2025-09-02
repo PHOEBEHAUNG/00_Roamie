@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.twotone.LocationOn
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
@@ -88,6 +89,16 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = { Text(getString(R.string.app_name)) },
+                            actions = {
+//                                IconButton(onClick = { /* TODO: Settings */ }) {
+//                                    Icon(Icons.Default.Settings, contentDescription = "Settings")
+//                                }
+                            }
+                        )
+                    },
                     bottomBar = {
                         NavigationBar(
                             windowInsets = NavigationBarDefaults.windowInsets,
@@ -107,9 +118,9 @@ class MainActivity : ComponentActivity() {
                                         restoreState = true
                                     }
                                 },
-                                icon = { Icon(Icons.AutoMirrored.Filled.List,
+                                icon = { Icon(painter = painterResource(id = R.drawable.ic_list_24),
                                     contentDescription = "Adventures",
-                                    tint = if (currentRoute == Destination.ADVENTURES.name) Color.Blue else Color.Gray) },
+                                    tint = if (currentRoute == Destination.ADVENTURES.name) Color(0xFF090E18) else Color(0xFF4D7599)) },
                                 label = { Text(Destination.ADVENTURES.name) },
                                 alwaysShowLabel = true
                             )
@@ -125,9 +136,9 @@ class MainActivity : ComponentActivity() {
                                         restoreState = true
                                     }
                                 },
-                                icon = { Icon(Icons.TwoTone.LocationOn,
+                                icon = { Icon(painter = painterResource(id = R.drawable.ic_workspaces_filled_24),
                                     contentDescription = "EXPLORER",
-                                    tint = if (currentRoute == Destination.EXPLORER.name) Color.Blue else Color.Gray) },
+                                    tint = if (currentRoute == Destination.EXPLORER.name) Color(0xFF090E18) else Color(0xFF4D7599)) },
                                 label = { Text(Destination.EXPLORER.name) },
                                 alwaysShowLabel = true
                             )
@@ -137,10 +148,10 @@ class MainActivity : ComponentActivity() {
                         FloatingActionButton(
                             onClick = {
                                 openCameraPreview()
-                            }, shape = CircleShape, containerColor = Color(0xFF6200EE)
+                            }, shape = CircleShape, containerColor = Color(0xFF429EF0)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Star,
+                                painter = painterResource(id = R.drawable.ic_camera_enhance_24),
                                 tint = Color.White,
                                 contentDescription = "Camera"
                             )
