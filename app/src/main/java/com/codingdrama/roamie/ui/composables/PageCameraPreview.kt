@@ -82,6 +82,7 @@ fun PageCameraPreview(
     modifier: Modifier = Modifier,
     isPreview: Boolean = false,
     onBitmapAvailable: (Bitmap) -> Unit,
+    onTakePhotoClick: (Bitmap) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -205,6 +206,7 @@ fun PageCameraPreview(
                                 targetValue = 0f,
                                 animationSpec = tween(durationMillis = 1000)
                             )
+                            onTakePhotoClick.invoke(bitmap)
                             // save bitmap to file
                             saveBitmapToFile(context, bitmap)
                             // reset animation state
@@ -250,6 +252,7 @@ fun PageCameraPreviewPreview() {
         modifier = Modifier,
         isPreview = true,
         onBitmapAvailable = {},
+        onTakePhotoClick = {},
         onBackClick = {}
     )
 }

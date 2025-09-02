@@ -39,11 +39,13 @@ class CameraActivity : ComponentActivity() {
                         // get bitmap from camera preview
                         // send it ML Kit for processing
 //                            Log.d("ViewCameraPreview", "Bitmap received: ${bitmap.width}x${bitmap.height}")
-
+                    },
+                    onTakePhotoClick = { bitmap ->
                         // create a coroutine to run detection
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.runOneDetection(this@CameraActivity, bitmap)
-                        }},
+                        }
+                    },
                     onBackClick = { finish() })
             }
         }

@@ -16,15 +16,10 @@ class CameraViewModel @Inject constructor(private val detectionRepository: Detec
         const val TAG = "CameraViewModel"
     }
 
-    private var latestDiscoveredObject = mutableStateOf<DiscoveredObject?>(null)
     fun runOneDetection(context: Context, bitmap: Bitmap): DiscoveredObject? {
         val discoveredObject = detectionRepository.detectHighestConfidentObject(context, bitmap)
         if (discoveredObject == null) return null
-
-        if (latestDiscoveredObject.value == null || !latestDiscoveredObject.value?.objectCategory?.name.equals(discoveredObject.objectCategory.name)) {
-            latestDiscoveredObject.value = discoveredObject
-        }
-
+        Log.d(TAG, "Discovered Object: $discoveredObject")
         return discoveredObject
     }
 }
