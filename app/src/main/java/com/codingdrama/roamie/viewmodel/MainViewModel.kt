@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val testRepository: TestRepository) : ViewModel() {
-//class MainViewModel : ViewModel() {
     fun getGreeting() = testRepository.getMessage()
     var adventures: List<AdventureLog> = listOf(
         AdventureLog(
