@@ -99,5 +99,90 @@ enum class ObjectCategory(val id: Int, val label: String, val emoji: String) {
 
     companion object {
         fun fromId(id: Int): ObjectCategory? = ObjectCategory.entries.find { it.id == id }
+
+        fun fromLabel(label: String): ObjectCategory? = when (label.lowercase()) {
+            "person" -> PERSON
+            "bicycle" -> BICYCLE
+            "car" -> CAR
+            "motorcycle" -> MOTORCYCLE
+            "airplane" -> AIRPLANE
+            "bus" -> BUS
+            "train" -> TRAIN
+            "truck" -> TRUCK
+            "boat" -> BOAT
+            "traffic light" -> TRAFFIC_LIGHT
+            "fire hydrant" -> FIRE_HYDRANT
+            "stop sign" -> STOP_SIGN
+            "parking meter" -> PARKING_METER
+            "bench" -> BENCH
+            "bird" -> BIRD
+            "cat" -> CAT
+            "dog" -> DOG
+            "horse" -> HORSE
+            "sheep" -> SHEEP
+            "cow" -> COW
+            "elephant" -> ELEPHANT
+            "bear" -> BEAR
+            "zebra" -> ZEBRA
+            "giraffe" -> GIRAFFE
+            "backpack" -> BACKPACK
+            "umbrella" -> UMBRELLA
+            "handbag" -> HANDBAG
+            "tie" -> TIE
+            "suitcase" -> SUITCASE
+            "frisbee" -> FRISBEE
+            "skis" -> SKIS
+            "snowboard" -> SNOWBOARD
+            "sports ball" -> SPORTS_BALL
+            "kite" -> KITE
+            "baseball bat" -> BASEBALL_BAT
+            "baseball glove" -> BASEBALL_GLOVE
+            "skateboard" -> SKATEBOARD
+            "surfboard" -> SURFBOARD
+            "tennis racket" -> TENNIS_RACKET
+            "bottle" -> BOTTLE
+            "wine glass" -> WINE_GLASS
+            "cup" -> CUP
+            "fork" -> FORK
+            "knife" -> KNIFE
+            "spoon" -> SPOON
+            "bowl" -> BOWL
+            "banana" -> BANANA
+            "apple" -> APPLE
+            "sandwich" -> SANDWICH
+            "orange" -> ORANGE
+            "broccoli" -> BROCCOLI
+            "carrot" -> CARROT
+            "hot dog" -> HOT_DOG
+            "pizza" -> PIZZA
+            "donut" -> DONUT
+            "cake" -> CAKE
+            "chair" -> CHAIR
+            "couch" -> COUCH
+            "potted plant" -> POTTED_PLANT
+            "bed" -> BED
+            "dining table" -> DINING_TABLE
+            "toilet" -> TOILET
+            "tv" -> TV
+            "laptop" -> LAPTOP
+            "mouse" -> MOUSE
+            "remote" -> REMOTE
+            "keyboard" -> KEYBOARD
+            "cell phone" -> CELL_PHONE
+            "microwave" -> MICROWAVE
+            "oven" -> OVEN
+            "toaster" -> TOASTER
+            "sink" -> SINK
+            "refrigerator" -> REFRIGERATOR
+            "book" -> BOOK
+            "clock" -> CLOCK
+            "vase" -> VASE
+            "scissors" -> SCISSORS
+            "teddy bear" -> TEDDY_BEAR
+            "hair drier" -> HAIR_DRIER
+            "toothbrush" -> TOOTHBRUSH
+            "" -> null
+            else -> null
+        }
     }
 }

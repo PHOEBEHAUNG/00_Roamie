@@ -3,6 +3,7 @@ package com.codingdrama.roamie.model.objectdetect
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
+import com.google.android.gms.tasks.Tasks.await
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.DetectedObject
 import com.google.mlkit.vision.objects.ObjectDetection
@@ -13,11 +14,11 @@ import kotlin.collections.forEachIndexed
 class MLDetection @Inject constructor(): IDetection {
     companion object {
         const val TAG = "MLDetection"
-        val isDebug = true
+        const val isDebug = false
     }
 
-    override fun detect(context: Context?, bitmap: Bitmap?) {
-        if (context == null || bitmap == null) return
+    override fun detect(context: Context?, bitmap: Bitmap?): List<Any?>? {
+        if (context == null || bitmap == null) return null
 
         // Step 1: create ML Kit's InputImage object
         val image = InputImage.fromBitmap(bitmap, 0)
@@ -29,15 +30,14 @@ class MLDetection @Inject constructor(): IDetection {
             .build()
         val objectDetector = ObjectDetection.getClient(options)
         // Step 3: feed given image to detector and setup callback
-        objectDetector.process(image)
-            .addOnSuccessListener {
-                // Task completed successfully
-                if (isDebug) debugPrint(it)
-            }
-            .addOnFailureListener {
-                // Task failed with an exception
-                Log.e(TAG, it.message.toString())
-            }
+        return try {
+            val result = await(objectDetector.process(image))
+            if (isDebug) debugPrint(result)
+            result
+        } catch (e: Exception) {
+            Log.e(TAG, e.message.toString())
+            null
+        }
     }
 
     private fun debugPrint(detectedObjects: List<DetectedObject>) {

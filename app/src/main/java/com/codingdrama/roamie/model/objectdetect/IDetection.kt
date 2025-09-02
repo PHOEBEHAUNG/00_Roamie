@@ -4,5 +4,5 @@ import android.content.Context
 import android.graphics.Bitmap
 
 interface IDetection {
-    fun detect(context: Context?, bitmap: Bitmap?)
+    fun detect(context: Context?, bitmap: Bitmap?): List<Any?>?
 }

@@ -4,7 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.codingdrama.roamie.R
 import com.codingdrama.roamie.model.data.AdventureLog
+import com.codingdrama.roamie.model.data.BoundingBox
 import com.codingdrama.roamie.model.data.DiscoveredObject
+import com.codingdrama.roamie.model.data.ObjectCategory
 import com.codingdrama.roamie.repository.TestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,10 +21,10 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "New York, NY",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "car",8),
-                DiscoveredObject(R.drawable.ic_trophy_24, "human",3),
-                DiscoveredObject(R.drawable.ic_trophy_24, "dog",1)
-            ),
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                ),
             tags = listOf("UrbanAdventure", "PetSpotting"),
             likes = 21,
             comments = 4
@@ -33,8 +35,23 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "Paris, France",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                ),
+            tags = listOf("CityWalk"),
+            likes = 15,
+            comments = 2
+        ),
+        AdventureLog(
+            user = "Liam",
+            avatarRes = R.drawable.ic_trophy_24,
+            location = "Paris, France",
+            time = 1756783016,
+            objects = listOf(
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
             ),
             tags = listOf("CityWalk"),
             likes = 15,
@@ -46,8 +63,9 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "Paris, France",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
             ),
             tags = listOf("CityWalk"),
             likes = 15,
@@ -59,8 +77,9 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "Paris, France",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
             ),
             tags = listOf("CityWalk"),
             likes = 15,
@@ -72,8 +91,9 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "Paris, France",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
             ),
             tags = listOf("CityWalk"),
             likes = 15,
@@ -85,8 +105,9 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "Paris, France",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
             ),
             tags = listOf("CityWalk"),
             likes = 15,
@@ -98,21 +119,9 @@ class MainViewModel @Inject constructor(private val testRepository: TestReposito
             location = "Paris, France",
             time = 1756783016,
             objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
-            ),
-            tags = listOf("CityWalk"),
-            likes = 15,
-            comments = 2
-        ),
-        AdventureLog(
-            user = "Liam",
-            avatarRes = R.drawable.ic_trophy_24,
-            location = "Paris, France",
-            time = 1756783016,
-            objects = listOf(
-                DiscoveredObject(R.drawable.ic_trophy_24, "house", 4),
-                DiscoveredObject(R.drawable.ic_trophy_24, "bike",2)
+                DiscoveredObject(1, ObjectCategory.BASEBALL_BAT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.FIRE_HYDRANT, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
+                DiscoveredObject(1, ObjectCategory.AIRPLANE, 2.0f, boundingBox = BoundingBox(1f,1f,1f,1f)),
             ),
             tags = listOf("CityWalk"),
             likes = 15,

@@ -12,7 +12,19 @@ data class AdventureLog(
 )
 
 data class DiscoveredObject(
-    val iconRes: Int,
-    val name: String,
-    val count: Int
+    val id: Int,
+    val objectCategory: ObjectCategory,
+    val confidence: Float, // score
+    val boundingBox: BoundingBox,
+) {
+    override fun toString(): String {
+        return "DiscoveredObject(id=$id, objectCategory=$objectCategory, confidence=$confidence, boundingBox=$boundingBox)"
+    }
+}
+
+data class BoundingBox(
+    val left: Float,
+    val top: Float,
+    val right: Float,
+    val bottom: Float
 )

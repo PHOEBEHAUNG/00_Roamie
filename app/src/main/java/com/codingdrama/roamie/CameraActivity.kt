@@ -25,7 +25,6 @@ class CameraActivity : ComponentActivity() {
     }
 
     private val viewModel: CameraViewModel by viewModels()
-
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class CameraActivity : ComponentActivity() {
 
                         // create a coroutine to run detection
                         CoroutineScope(Dispatchers.IO).launch {
-                            viewModel.runDetection(this@CameraActivity, bitmap)
+                            viewModel.runOneDetection(this@CameraActivity, bitmap)
                         }},
                     onBackClick = { finish() })
             }

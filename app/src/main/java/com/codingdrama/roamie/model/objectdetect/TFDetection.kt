@@ -11,11 +11,11 @@ import javax.inject.Inject
 class TFDetection @Inject constructor(): IDetection {
     companion object {
         const val TAG = "TFDetection"
-        val isDebug = true
+        const val isDebug = false
     }
 
-    override fun detect(context: Context?, bitmap: Bitmap?) {
-        if (context == null || bitmap == null) return
+    override fun detect(context: Context?, bitmap: Bitmap?): List<Any?>? {
+        if (context == null || bitmap == null) return null
         // create TFLite's TensorImage object
         val image = TensorImage.fromBitmap(bitmap)
         // initialize the detector object
@@ -31,6 +31,7 @@ class TFDetection @Inject constructor(): IDetection {
         // feed given image to the model and print the detection result
         val results = detector.detect(image)
         if (isDebug) debugPrint(results)
+        return results
     }
 
     private fun debugPrint(results : List<Detection>) {
