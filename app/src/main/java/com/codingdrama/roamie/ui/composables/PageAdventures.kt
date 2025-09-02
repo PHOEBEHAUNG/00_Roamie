@@ -97,7 +97,7 @@ fun BadgeCard(title: String = "Badges", count: Int = 20, imageVector: ImageVecto
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    text = "Badges",
+                    text = title,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
             }
