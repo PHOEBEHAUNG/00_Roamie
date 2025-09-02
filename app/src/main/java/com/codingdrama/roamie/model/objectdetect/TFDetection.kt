@@ -25,7 +25,7 @@ class TFDetection @Inject constructor(): IDetection {
             .build()
         val detector = ObjectDetector.createFromFileAndOptions(
             context, // the application context
-            "model.tflite", // must be same as the filename in assets folder
+            "detect_model.tflite",
             options
         )
         // feed given image to the model and print the detection result
